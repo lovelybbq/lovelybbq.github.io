@@ -1,0 +1,2 @@
+# Hue House: sellers allowed to sell this app's ads (IAB app-ads.txt).
+google.com, pub-2696338268163118, DIRECT, f08c47fec0942fa0
