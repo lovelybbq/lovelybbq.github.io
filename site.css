@@ -295,6 +295,18 @@ h2 {
 p {
   margin: 0 0 12px;
 }
+/* No paragraph ends on a lone short word, and titles break into even lines, where the browser can. */
+p,
+li,
+dd,
+summary {
+  text-wrap: pretty;
+}
+h1,
+h2,
+.tagline {
+  text-wrap: balance;
+}
 ul {
   margin: 0 0 12px;
   padding-left: 1.25em;
