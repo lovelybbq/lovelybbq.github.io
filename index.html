@@ -12,317 +12,231 @@
     <meta name="theme-color" content="#F8E8D4" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#231E1A" media="(prefers-color-scheme: dark)" />
     <meta name="referrer" content="no-referrer" />
-    <link rel="icon" type="image/png" href="icon.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <!--
-  Nothing on this page loads anything from another site: the fonts and the
-  icon are files next to it.
+  Nothing on this page loads anything from another site: its styles, script,
+  fonts and icons are files on this one.
 -->
-    <style>
-      @font-face {
-        font-family: 'Fraunces';
-        src: url('fonts/Fraunces_600SemiBold.ttf') format('truetype');
-        font-weight: 600;
-        font-display: swap;
-      }
-      @font-face {
-        font-family: 'DM Sans';
-        src: url('fonts/DMSans_500Medium.ttf') format('truetype');
-        font-weight: 500;
-        font-display: swap;
-      }
-      @font-face {
-        font-family: 'DM Sans';
-        src: url('fonts/DMSans_700Bold.ttf') format('truetype');
-        font-weight: 700;
-        font-display: swap;
-      }
-
-      :root {
-        color-scheme: light dark;
-        --wall: #f8e8d4;
-        --stripe: #f3dfc6;
-        --surface: #ffffff;
-        --surface-alt: #f6ecdf;
-        --text: #33251e;
-        --muted: #76655a;
-        --ink: #3a2a22;
-        --border: #e8dccb;
-        --accent: #b4532a;
-        --gold: #f2b544;
-        --on-gold: #33251e;
-        --gold-tint: #fce7b4;
-        --pink: #f28ba8;
-        --red: #d9433a;
-        --yellow: #f5c53d;
-        --blue: #3c7dd9;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --wall: #231e1a;
-          --stripe: #29231e;
-          --surface: #3a322c;
-          --surface-alt: #2c2622;
-          --text: #f6eee4;
-          --muted: #bba999;
-          --ink: #0c0a09;
-          --border: #4b4038;
-          --accent: #f0925f;
-          --on-gold: #2a1e17;
-          --gold-tint: #5a4524;
+    <link rel="stylesheet" href="site.css" />
+    <script src="site.js" defer></script>
+    <!-- languages -->
+    <link rel="alternate" hreflang="en" href="https://lovelybbq.github.io/index.html" />
+    <link rel="alternate" hreflang="ru" href="https://lovelybbq.github.io/ru/index.html" />
+    <link rel="alternate" hreflang="uk" href="https://lovelybbq.github.io/uk/index.html" />
+    <link rel="alternate" hreflang="es" href="https://lovelybbq.github.io/es/index.html" />
+    <link rel="alternate" hreflang="de" href="https://lovelybbq.github.io/de/index.html" />
+    <link rel="alternate" hreflang="fr" href="https://lovelybbq.github.io/fr/index.html" />
+    <link rel="alternate" hreflang="pt-BR" href="https://lovelybbq.github.io/pt-br/index.html" />
+    <link rel="alternate" hreflang="ja" href="https://lovelybbq.github.io/ja/index.html" />
+    <link rel="alternate" hreflang="x-default" href="https://lovelybbq.github.io/index.html" />
+    <script>
+      // Opens this page in the visitor's own language, the first of their browser's
+      // the site has, unless they picked one in the language menu (site.js).
+      (function () {
+        var folders = {
+          en: 'en',
+          ru: 'ru',
+          uk: 'uk',
+          es: 'es',
+          de: 'de',
+          fr: 'fr',
+          pt: 'pt-br',
+          ja: 'ja',
+        };
+        var pick = null;
+        try {
+          pick = localStorage.getItem('hue-house-lang');
+        } catch (error) {}
+        var wanted =
+          navigator.languages && navigator.languages.length
+            ? navigator.languages
+            : [navigator.language || 'en'];
+        for (var i = 0; !pick && i < wanted.length; i++) {
+          pick = folders[String(wanted[i]).toLowerCase().split(/[-_]/)[0]] || null;
         }
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-      html {
-        -webkit-text-size-adjust: 100%;
-      }
-      body {
-        margin: 0;
-        color: var(--text);
-        background-color: var(--wall);
-        background-image: repeating-linear-gradient(
-          90deg,
-          var(--wall) 0 32px,
-          var(--stripe) 32px 64px
-        );
-        font:
-          500 17px/1.55 'DM Sans',
-          system-ui,
-          -apple-system,
-          'Segoe UI',
-          sans-serif;
-      }
-      .page {
-        max-width: 680px;
-        margin: 0 auto;
-        padding: max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 48px
-          max(16px, env(safe-area-inset-left));
-      }
-
-      a {
-        color: var(--accent);
-        text-decoration-thickness: 2px;
-        text-underline-offset: 3px;
-      }
-      a:focus-visible,
-      summary:focus-visible {
-        outline: 3px solid var(--accent);
-        outline-offset: 3px;
-        border-radius: 8px;
-      }
-      strong {
-        font-weight: 700;
-      }
-
-      .top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin-bottom: 20px;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        color: var(--text);
-        text-decoration: none;
-        font-family: 'Fraunces', Georgia, serif;
-        font-weight: 600;
-        font-size: 21px;
-      }
-      .brand img {
-        width: 40px;
-        height: 40px;
-        border-radius: 11px;
-        border: 2px solid var(--ink);
-        display: block;
-      }
-      .tabs {
-        display: flex;
-        gap: 8px;
-      }
-      .tabs a {
-        display: inline-block;
-        padding: 6px 14px;
-        border-radius: 999px;
-        border: 2px solid var(--ink);
-        box-shadow: 0 3px 0 var(--ink);
-        background: var(--surface);
-        color: var(--text);
-        font-weight: 700;
-        font-size: 15px;
-        text-decoration: none;
-      }
-      .tabs a[aria-current='page'] {
-        background: var(--gold);
-        color: var(--on-gold);
-      }
-
-      .card {
-        background: var(--surface);
-        border: 2.4px solid var(--ink);
-        border-radius: 20px;
-        box-shadow: 0 4px 0 var(--ink);
-        padding: 20px;
-        margin: 0 0 20px;
-      }
-      .card.tint {
-        background: var(--gold-tint);
-      }
-
-      h1,
-      h2 {
-        font-family: 'Fraunces', Georgia, serif;
-        font-weight: 600;
-        margin: 0;
-      }
-      h1 {
-        font-size: clamp(34px, 10vw, 46px);
-        line-height: 1.05;
-      }
-      h2 {
-        font-size: 23px;
-        line-height: 1.25;
-        margin-bottom: 10px;
-      }
-      p {
-        margin: 0 0 12px;
-      }
-      ul {
-        margin: 0 0 12px;
-        padding-left: 1.25em;
-      }
-      li {
-        margin: 5px 0;
-      }
-      .card > :last-child,
-      li > :last-child {
-        margin-bottom: 0;
-      }
-      .muted {
-        color: var(--muted);
-      }
-
-      .hero {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-      }
-      .hero img {
-        width: 96px;
-        height: 96px;
-        flex: none;
-        border-radius: 22px;
-        border: 2.4px solid var(--ink);
-        box-shadow: 0 4px 0 var(--ink);
-        display: block;
-      }
-      .tagline {
-        font-family: 'Fraunces', Georgia, serif;
-        font-weight: 600;
-        font-size: 19px;
-        color: var(--accent);
-        margin: 6px 0 0;
-      }
-      .about {
-        margin-top: 16px;
-      }
-      @media (max-width: 380px) {
-        .hero img {
-          width: 76px;
-          height: 76px;
-          border-radius: 18px;
+        if (pick && pick !== 'en' && Object.values(folders).indexOf(pick) >= 0) {
+          location.replace(pick + '/index.html' + location.hash);
         }
-      }
-
-      .paint {
-        display: flex;
-        height: 14px;
-        border: 2.4px solid var(--ink);
-        border-radius: 999px;
-        overflow: hidden;
-        margin-top: 18px;
-      }
-      .paint span {
-        flex: 1;
-      }
-      .paint span + span {
-        border-left: 2px solid var(--ink);
-      }
-
-      .section-title {
-        font-family: 'Fraunces', Georgia, serif;
-        font-weight: 600;
-        font-size: 23px;
-        margin: 28px 4px 12px;
-      }
-      .faq details {
-        background: var(--surface);
-        border: 2.4px solid var(--ink);
-        border-radius: 16px;
-        box-shadow: 0 3px 0 var(--ink);
-        margin: 0 0 12px;
-      }
-      .faq summary {
-        cursor: pointer;
-        list-style: none;
-        position: relative;
-        padding: 14px 52px 14px 16px;
-        font-weight: 700;
-      }
-      .faq summary::-webkit-details-marker {
-        display: none;
-      }
-      .faq summary::after {
-        content: '+';
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 28px;
-        height: 28px;
-        border-radius: 999px;
-        border: 2px solid var(--ink);
-        background: var(--gold);
-        color: var(--on-gold);
-        font-size: 20px;
-        line-height: 23px;
-        text-align: center;
-        font-weight: 700;
-      }
-      .faq details[open] summary::after {
-        content: '–';
-      }
-      .faq .answer {
-        padding: 0 16px 16px;
-      }
-      .faq .answer > :last-child {
-        margin-bottom: 0;
-      }
-
-      footer {
-        text-align: center;
-        font-size: 15px;
-        color: var(--muted);
-        margin-top: 28px;
-      }
-      footer a {
-        color: var(--muted);
-      }
-    </style>
+      })();
+    </script>
+    <!-- /languages -->
   </head>
   <body>
     <div class="page">
-      <header class="top" style="justify-content: flex-end">
-        <nav class="tabs" aria-label="Pages">
-          <a href="index.html" aria-current="page">Support</a>
-          <a href="privacy.html">Privacy</a>
-        </nav>
+      <header class="top">
+        <div class="controls">
+          <nav class="tabs" aria-label="Pages">
+            <a href="index.html" aria-current="page">Support</a>
+            <a href="privacy.html">Privacy</a>
+          </nav>
+          <!-- language menu -->
+          <details class="lang">
+            <summary aria-label="Language: English">
+              <svg class="flag" viewBox="0 0 28 30" aria-hidden="true">
+                <circle class="plate" cx="14" cy="16" r="13" />
+                <circle class="plate" cx="14" cy="14" r="13" />
+                <clipPath id="flag-now"><circle cx="12" cy="12" r="12" /></clipPath>
+                <g transform="translate(3 3) scale(0.9166666666666666)">
+                  <g clip-path="url(#flag-now)">
+                    <rect width="24" height="24" fill="#012169" />
+                    <path d="M0 0 24 24M24 0 0 24" stroke="#FFFFFF" stroke-width="4.8" />
+                    <path d="M0 0 24 24M24 0 0 24" stroke="#C8102E" stroke-width="1.6" />
+                    <path d="M12 0V24M0 12H24" stroke="#FFFFFF" stroke-width="8" />
+                    <path d="M12 0V24M0 12H24" stroke="#C8102E" stroke-width="4.8" />
+                  </g>
+                </g>
+              </svg>
+            </summary>
+            <ul>
+              <li>
+                <a href="index.html" hreflang="en" lang="en" data-lang="en" aria-current="page">
+                  <svg class="flag" viewBox="0 0 28 30" aria-hidden="true">
+                    <circle class="plate" cx="14" cy="16" r="13" />
+                    <circle class="plate" cx="14" cy="14" r="13" />
+                    <clipPath id="flag-en"><circle cx="12" cy="12" r="12" /></clipPath>
+                    <g transform="translate(3 3) scale(0.9166666666666666)">
+                      <g clip-path="url(#flag-en)">
+                        <rect width="24" height="24" fill="#012169" />
+                        <path d="M0 0 24 24M24 0 0 24" stroke="#FFFFFF" stroke-width="4.8" />
+                        <path d="M0 0 24 24M24 0 0 24" stroke="#C8102E" stroke-width="1.6" />
+                        <path d="M12 0V24M0 12H24" stroke="#FFFFFF" stroke-width="8" />
+                        <path d="M12 0V24M0 12H24" stroke="#C8102E" stroke-width="4.8" />
+                      </g>
+                    </g>
+                  </svg>
+                  <span>English</span>
+                </a>
+              </li>
+              <li>
+                <a href="ru/index.html" hreflang="ru" lang="ru" data-lang="ru">
+                  <svg class="flag" viewBox="0 0 28 30" aria-hidden="true">
+                    <circle class="plate" cx="14" cy="16" r="13" />
+                    <circle class="plate" cx="14" cy="14" r="13" />
+                    <clipPath id="flag-ru"><circle cx="12" cy="12" r="12" /></clipPath>
+                    <g transform="translate(3 3) scale(0.9166666666666666)">
+                      <g clip-path="url(#flag-ru)">
+                        <rect y="0" width="24" height="8" fill="#FFFFFF" />
+                        <rect y="8" width="24" height="8" fill="#0039A6" />
+                        <rect y="16" width="24" height="8" fill="#D52B1E" />
+                      </g>
+                    </g>
+                  </svg>
+                  <span>Русский</span>
+                </a>
+              </li>
+              <li>
+                <a href="uk/index.html" hreflang="uk" lang="uk" data-lang="uk">
+                  <svg class="flag" viewBox="0 0 28 30" aria-hidden="true">
+                    <circle class="plate" cx="14" cy="16" r="13" />
+                    <circle class="plate" cx="14" cy="14" r="13" />
+                    <clipPath id="flag-uk"><circle cx="12" cy="12" r="12" /></clipPath>
+                    <g transform="translate(3 3) scale(0.9166666666666666)">
+                      <g clip-path="url(#flag-uk)">
+                        <rect y="0" width="24" height="12" fill="#0057B7" />
+                        <rect y="12" width="24" height="12" fill="#FFD700" />
+                      </g>
+                    </g>
+                  </svg>
+                  <span>Українська</span>
+                </a>
+              </li>
+              <li>
+                <a href="es/index.html" hreflang="es" lang="es" data-lang="es">
+                  <svg class="flag" viewBox="0 0 28 30" aria-hidden="true">
+                    <circle class="plate" cx="14" cy="16" r="13" />
+                    <circle class="plate" cx="14" cy="14" r="13" />
+                    <clipPath id="flag-es"><circle cx="12" cy="12" r="12" /></clipPath>
+                    <g transform="translate(3 3) scale(0.9166666666666666)">
+                      <g clip-path="url(#flag-es)">
+                        <rect y="0" width="24" height="6" fill="#AA151B" />
+                        <rect y="6" width="24" height="12" fill="#F1BF00" />
+                        <rect y="18" width="24" height="6" fill="#AA151B" />
+                      </g>
+                    </g>
+                  </svg>
+                  <span>Español</span>
+                </a>
+              </li>
+              <li>
+                <a href="de/index.html" hreflang="de" lang="de" data-lang="de">
+                  <svg class="flag" viewBox="0 0 28 30" aria-hidden="true">
+                    <circle class="plate" cx="14" cy="16" r="13" />
+                    <circle class="plate" cx="14" cy="14" r="13" />
+                    <clipPath id="flag-de"><circle cx="12" cy="12" r="12" /></clipPath>
+                    <g transform="translate(3 3) scale(0.9166666666666666)">
+                      <g clip-path="url(#flag-de)">
+                        <rect y="0" width="24" height="8" fill="#000000" />
+                        <rect y="8" width="24" height="8" fill="#DD0000" />
+                        <rect y="16" width="24" height="8" fill="#FFCE00" />
+                      </g>
+                    </g>
+                  </svg>
+                  <span>Deutsch</span>
+                </a>
+              </li>
+              <li>
+                <a href="fr/index.html" hreflang="fr" lang="fr" data-lang="fr">
+                  <svg class="flag" viewBox="0 0 28 30" aria-hidden="true">
+                    <circle class="plate" cx="14" cy="16" r="13" />
+                    <circle class="plate" cx="14" cy="14" r="13" />
+                    <clipPath id="flag-fr"><circle cx="12" cy="12" r="12" /></clipPath>
+                    <g transform="translate(3 3) scale(0.9166666666666666)">
+                      <g clip-path="url(#flag-fr)">
+                        <rect x="0" width="8" height="24" fill="#002395" />
+                        <rect x="8" width="8" height="24" fill="#FFFFFF" />
+                        <rect x="16" width="8" height="24" fill="#ED2939" />
+                      </g>
+                    </g>
+                  </svg>
+                  <span>Français</span>
+                </a>
+              </li>
+              <li>
+                <a href="pt-br/index.html" hreflang="pt-BR" lang="pt-BR" data-lang="pt-br">
+                  <svg class="flag" viewBox="0 0 28 30" aria-hidden="true">
+                    <circle class="plate" cx="14" cy="16" r="13" />
+                    <circle class="plate" cx="14" cy="14" r="13" />
+                    <clipPath id="flag-pt-br"><circle cx="12" cy="12" r="12" /></clipPath>
+                    <g transform="translate(3 3) scale(0.9166666666666666)">
+                      <g clip-path="url(#flag-pt-br)">
+                        <rect width="24" height="24" fill="#009C3B" />
+                        <path d="M1.6 12 12 4.4 22.4 12 12 19.6Z" fill="#FFDF00" />
+                        <circle cx="12" cy="12" r="5" fill="#002776" />
+                        <clipPath id="flag-pt-br-ball"><circle cx="12" cy="12" r="5" /></clipPath>
+                        <path
+                          d="M6.6 13.2Q11.6 9.4 17.6 11"
+                          stroke="#FFFFFF"
+                          stroke-width="1.2"
+                          fill="none"
+                          clip-path="url(#flag-pt-br-ball)"
+                        />
+                      </g>
+                    </g>
+                  </svg>
+                  <span>Português (Brasil)</span>
+                </a>
+              </li>
+              <li>
+                <a href="ja/index.html" hreflang="ja" lang="ja" data-lang="ja">
+                  <svg class="flag" viewBox="0 0 28 30" aria-hidden="true">
+                    <circle class="plate" cx="14" cy="16" r="13" />
+                    <circle class="plate" cx="14" cy="14" r="13" />
+                    <clipPath id="flag-ja"><circle cx="12" cy="12" r="12" /></clipPath>
+                    <g transform="translate(3 3) scale(0.9166666666666666)">
+                      <g clip-path="url(#flag-ja)">
+                        <rect width="24" height="24" fill="#FFFFFF" />
+                        <circle cx="12" cy="12" r="7.2" fill="#BC002D" />
+                      </g>
+                    </g>
+                  </svg>
+                  <span>日本語</span>
+                </a>
+              </li>
+            </ul>
+          </details>
+          <!-- /language menu -->
+        </div>
       </header>
 
       <main>
@@ -352,14 +266,14 @@
         </section>
 
         <section class="card tint" aria-labelledby="progress">
-          <h2 id="progress">Your progress stays on your phone</h2>
+          <h2 id="progress">Your progress is saved on your phone</h2>
           <p>
             There is no account. Your levels, stars, coins, painted houses and settings are saved on
-            your iPhone and nowhere else, and the game plays without internet (the ads need it).
+            your iPhone, and the game plays without internet (the ads need it). They are part of
+            your iPhone’s backups, so a new iPhone set up from your old one keeps them.
           </p>
           <p>
-            <strong>Deleting the app deletes your progress for good.</strong> It isn’t part of
-            iCloud or computer backups, so it can’t be brought back, and a new phone starts from
+            <strong>Deleting the app deletes your progress.</strong> Installing it again starts from
             level 1.
           </p>
         </section>
@@ -435,7 +349,11 @@
           <details>
             <summary>Can I move my progress to a new phone?</summary>
             <div class="answer">
-              <p>Not at the moment. Progress lives only on the phone you play on.</p>
+              <p>
+                Yes, with the rest of your iPhone. Set up the new iPhone from your old one, or from
+                an iCloud or computer backup, and the game opens where you left off. There is no
+                account, so two phones can’t share one game.
+              </p>
             </div>
           </details>
 
